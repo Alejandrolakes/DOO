@@ -5,10 +5,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
- * @author alejandrolagosj
- */
 package banco;
 
 import java.util.Scanner;
@@ -63,9 +59,7 @@ public class Cuenta {
         }
     }
     
-    public void consultarSaldo(){
-        System.out.println("Su saldo es de: " + saldo + " pesos");
-    }
+    
     
             
 }

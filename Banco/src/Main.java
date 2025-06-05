@@ -3,20 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
- * @author alejandrolagosj
- */
-
-package banco;
-
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Cliente cliente = null; // esta vacio porque aun no creamos un cliente
-        int opcion; 
+        Cliente cliente = null;
+        int opcion;
 
         do {
             System.out.println("\n Menu de opciones");
@@ -26,88 +19,104 @@ public class Main {
             System.out.println("3. Depositar");
             System.out.println("4. Girar");
             System.out.println("5. Consultar saldo");
-            System.out.println("6. ==== Salir====");
-            System.out.print("Seleccione una opción: \n ");
+            System.out.println("6. ==== Salir ====");
+            System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
-                case 1 -> { // descubri que con estas flechas en el case -> no necesitamos break. 
-                    String nombre;
-                    String rut;
-                    String apellidoPaterno;
-                    String apellidoMaterno;
-                    String domicilio;
-                    String comuna; 
-                    String telefono; 
-                    int numeroCuenta; 
+                case 1 -> {
+                    String nombre, rut, apellidoPaterno, apellidoMaterno;
+                    String domicilio, comuna, telefono;
+                    int numeroCuenta, tipoCuenta;
+                    CuentaBancaria cuenta;
 
-                    System.out.println("Ingrese el nombre del cliente");
+                    System.out.println("Ingrese el nombre del cliente:");
                     nombre = scanner.nextLine();
 
-                    System.out.println("Ingrese el Rut: ");
+                    System.out.println("Ingrese el RUT:");
                     rut = scanner.nextLine();
 
-                    System.out.println("Ingrese apellido paterno");
+                    System.out.println("Ingrese apellido paterno:");
                     apellidoPaterno = scanner.nextLine();
 
-                    System.out.println("Ingrese apellido materno");
+                    System.out.println("Ingrese apellido materno:");
                     apellidoMaterno = scanner.nextLine();
 
-                    System.out.println("Ingrese domicilio");
+                    System.out.println("Ingrese domicilio:");
                     domicilio = scanner.nextLine();
 
-                    System.out.println("Ingrese comuna");
+                    System.out.println("Ingrese comuna:");
                     comuna = scanner.nextLine();
 
-                    System.out.println("Ingrese telefono");
+                    System.out.println("Ingrese teléfono:");
                     telefono = scanner.nextLine();
 
-                    System.out.println("Ingrese numero de cuenta: \nSolo de 9 dígitos.");
+                    System.out.println("Ingrese número de cuenta (9 dígitos):");
                     numeroCuenta = scanner.nextInt();
                     scanner.nextLine();
 
-                    Cuenta cuenta = new Cuenta(numeroCuenta);
-                    cliente = new Cliente(rut, nombre, apellidoPaterno, apellidoMaterno, domicilio, comuna, telefono, cuenta);
-                    System.out.println("Cliente registrado con éxito!");
+                    System.out.println("Seleccione tipo de cuenta:");
+                    System.out.println("1. Cuenta Corriente");
+                    System.out.println("2. Cuenta Ahorro");
+                    System.out.println("3. Cuenta Crédito");
+                    tipoCuenta = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (tipoCuenta == 1) {
+                        cuenta = new CuentaCorriente(numeroCuenta);
+                    } else if (tipoCuenta == 2) {
+                        cuenta = new CuentaAhorro(numeroCuenta);
+                    } else {
+                        cuenta = new CuentaCredito(numeroCuenta);
+                    }
+
+                    cliente = new Cliente(rut, nombre, apellidoPaterno, apellidoMaterno,
+                                          domicilio, comuna, telefono, cuenta);
+
+                    System.out.println("Cliente registrado con éxito.");
                 }
 
                 case 2 -> {
-                    if (cliente != null){
-                        cliente.mostrarDatos();
-                    }else{
+                    if (cliente != null) {
+                        cliente.mostrarInformacion();
+                    } else {
                         System.out.println("No hay datos registrados.");
                     }
                 }
+
                 case 3 -> {
-                    if (cliente != null){
+                    if (cliente != null) {
                         cliente.getCuenta().depositar();
-                    }else{
-                        System.out.println("Primero se debe registrar un cliente con cuenta");
+                    } else {
+                        System.out.println("Primero debe registrar un cliente.");
                     }
                 }
+
                 case 4 -> {
-                    if (cliente != null){
-                        cliente.getCuenta().girar();
-                        System.out.println("Su saldo actual es de : "+ cliente.getCuenta().getSaldo());
-                    }else {
-                        System.out.println("No hay registro de cuenta para girar.");
+                    if (cliente != null) {
+                        System.out.print("Ingrese monto a girar: ");
+                        int monto = scanner.nextInt();
+                        scanner.nextLine();
+                        cliente.getCuenta().girar(monto);
+                    } else {
+                        System.out.println("No hay cuenta registrada.");
                     }
                 }
-                case 5 ->{
-                    if (cliente != null){
-                        System.out.println("Su saldo es de " + cliente.getCuenta().getSaldo() + " pesos");
-                    }else{
+
+                case 5 -> {
+                    if (cliente != null) {
+                        cliente.getCuenta().consultarSaldo();
+                    } else {
                         System.out.println("No hay datos que mostrar.");
                     }
                 }
-                case 6 -> {
-                    System.out.println("Gracias por usar el sistema. Hasta pronto. ");
-                }
+
+                case 6 -> System.out.println("Gracias por usar el sistema. ¡Hasta pronto!");
             }
 
         } while (opcion != 6);
 
-        System.out.println("\nCierre del programa\n");
-    }  
+        System.out.println("\nCierre del programa.");
+    }
 }
